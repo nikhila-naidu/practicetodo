@@ -15,6 +15,8 @@ import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import './App.css';
 
+axios.defaults.baseURL = process.env.REACT_APP_BACKENDURL;
+
 function App() {
   const [task, setTask] = useState('');
   const [todos, setTodos] = useState([]);
@@ -28,10 +30,7 @@ function App() {
     e.preventDefault();
     const addTodo = async () => {
       try {
-        const { data } = await axios.post(
-          'http://localhost:5005/api/todo/add-todo',
-          { task: task },
-        );
+        const { data } = await axios.post('/api/todo/add-todo', { task: task });
         setTodos((prev) => [...prev, data]);
       } catch (error) {
         console.log(error);
@@ -40,12 +39,9 @@ function App() {
 
     const editTodo = async (id) => {
       try {
-        const { data } = await axios.patch(
-          `http://localhost:5005/api/todo/update/${id}`,
-          {
-            task: task,
-          },
-        );
+        const { data } = await axios.patch(`/api/todo/update/${id}`, {
+          task: task,
+        });
         setTodos((prev) =>
           prev.map((todo) => {
             if (todo._id === id) return data;
@@ -64,7 +60,7 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(` http://localhost:5005/api/todo/delete/${id}`);
+      await axios.delete(`/api/todo/delete/${id}`);
       setTodos((prev) => prev.filter((todo) => todo._id !== id));
     } catch (error) {
       console.error(error);
@@ -79,9 +75,7 @@ function App() {
   useEffect(() => {
     const allTodos = async () => {
       try {
-        const { data } = await axios.get(
-          'http://localhost:5005/api/todo/get-all',
-        );
+        const { data } = await axios.get('/api/todo/get-all');
         setTodos(data);
       } catch (error) {
         console.log(error);
