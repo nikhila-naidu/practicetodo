@@ -1,8 +1,8 @@
 import Todo from '../models/todo-model.js';
 
 export const getAllTodos = async (req, res, next) => {
-  const allTodo = await Todo.find();
   try {
+    const allTodo = await Todo.find();
     res.json(allTodo);
   } catch (error) {
     console.log(error);
@@ -25,8 +25,8 @@ export const addTodo = async (req, res, next) => {
 export const deleteTodoById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const deleteTodo = await Todo.findByIdAndRemove(id);
-    res.json(deleteTodo);
+    const deletedTodo = await Todo.findByIdAndRemove(id);
+    res.json(deletedTodo);
   } catch (error) {
     console.log(error);
   }
@@ -35,8 +35,9 @@ export const deleteTodoById = async (req, res, next) => {
 export const updateTodoById = async (req, res, next) => {
   const { id } = req.params;
   const { task } = req.body;
-  const editTodo = await Todo.findById(id);
+
   try {
+    const editTodo = await Todo.findById(id);
     if (task) {
       editTodo.task = task;
     }
